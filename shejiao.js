@@ -21,7 +21,7 @@ const afternoonEnd = now.hour(17).minute(0).second(0).millisecond(0);
 const unsignList = [];
 const overstepList = [];
 
-const title = '打卡提醒\n';
+const title = '打卡提醒\n\n';
 
 let desp = '';
 
@@ -46,7 +46,7 @@ const is_morning = isMorning();
     const loginResult = await axios.post(url, loginData);
     const loginDataResult = loginResult.data;
     if (loginDataResult.Code !== 1) {
-        desp += '登录失败\n';
+        desp += '登录失败\n\n';
         await pushMsg(title, desp);
         return;
     }
@@ -55,7 +55,7 @@ const is_morning = isMorning();
     getSignRecord.Token = token;
     const userListResult = await axios.post(url, userListData);
     if (userListResult.data.Code !== 1) {
-        desp += '获取用户列表失败\n';
+        desp += '获取用户列表失败\n\n';
         await pushMsg(title, desp);
         return;
     }
@@ -66,7 +66,7 @@ const is_morning = isMorning();
         getSignRecord.UserName = user.UserName;
         const getSignRecordResult = await axios.post(url, getSignRecord);
         if (getSignRecordResult.data.Code !== 1) {
-            desp += `获取${user.TrueName} ${user.UserName}打卡列表失败\n`;
+            desp += `获取${user.TrueName} ${user.UserName}打卡列表失败\n\n`;
             continue;
         }
         console.log(getSignRecordResult.data);
@@ -99,21 +99,21 @@ const is_morning = isMorning();
         }
     }
     if (unsignList.length > 0) {
-        desp += '未按时打卡人员：\n';
+        desp += '未按时打卡人员：\n\n';
         unsignList.forEach(item => {
             desp += `${item.TrueName} ${item.UserName} `;
             // if (item.signInTime) {
             //     desp += `上次打卡时间:${item.signInTime}`;
             // }
-            desp += '\n';
+            desp += '\n\n';
         });
     } else {
-        desp += '所有人员都已按时打卡\n';
+        desp += '所有人员都已按时打卡\n\n';
     }
     if (overstepList.length > 0) {
-        desp += '越界打卡人员：\n';
+        desp += '越界打卡人员：\n\n';
         overstepList.forEach(item => {
-            desp += `${item.TrueName} ${item.UserName}在${item.address}打卡\n`;
+            desp += `${item.TrueName} ${item.UserName}在${item.address}打卡\n\n`;
         });
     }
 
