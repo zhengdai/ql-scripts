@@ -31,7 +31,7 @@ function isMorning() {
 }
 
 function isYidi(address) {
-    return !address.includes('丰顺');
+    return address === null || !address.includes('丰顺');
 }
 
 async function pushMsg(title, content) {
