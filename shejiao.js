@@ -1,4 +1,6 @@
-const key = '2e18d8deb4744bfa846eb387981775a9';
+'use strict';
+
+const key = 'b4e2181599f446189b6f2deef991b5de';//process.env.PUSHPLUS_KEY;
 //'SCT247069TNUXgDyRxxFvpAg0fPdk0BJU9';
 //'SCT245797TQPmsilGTjKbWYDC4vAaVoHHh';
 
@@ -12,6 +14,16 @@ const userListData = {"Action":"ManagementGetUserList","DepartmentEID":"BEAC1451
 const getSignRecord = {"Action":"ManagementGetSignInRecord"};
 const axios = require('axios');
 const dayjs = require('dayjs');
+const AxiosLogger = require("axios-logger");
+
+axios.interceptors.request.use(
+  AxiosLogger.requestLogger,
+  AxiosLogger.errorLogger
+);
+axios.interceptors.response.use(
+  AxiosLogger.responseLogger,
+  AxiosLogger.errorLogger
+);
 const now = dayjs();
 const morningStart = now.hour(7).minute(0).second(0).millisecond(0);
 const morningEnd = now.hour(11).minute(0).second(0).millisecond(0);
@@ -34,8 +46,9 @@ function isYidi(address) {
     return address === null || !address.includes('丰顺');
 }
 
+
+
 async function pushMsg(title, content) {
-    console.log("Pushplus 推送开始");
     const data = {
         token: key,
         title,
@@ -43,12 +56,11 @@ async function pushMsg(title, content) {
         template: "json",
     }
     const res = await axios.post(push_url, data);
-    console.log(res.data);
 }
 
 const is_morning = isMorning();
 
-(async () => {
+exports.main = async (event, context) => {
     const loginResult = await axios.post(url, loginData);
     const loginDataResult = loginResult.data;
     if (loginDataResult.Code !== 1) {
@@ -75,7 +87,6 @@ const is_morning = isMorning();
             desp += `获取${user.TrueName} ${user.UserName}打卡列表失败 \r\n`;
             continue;
         }
-        console.log(getSignRecordResult.data);
         const signList = getSignRecordResult.data.Data;
         //说明没打卡
         if (signList.length < 1) {
@@ -123,7 +134,5 @@ const is_morning = isMorning();
         });
     }
 
-    console.log(title, desp);
     await pushMsg(title, desp);
-
-})();
+};
