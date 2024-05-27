@@ -1,8 +1,6 @@
 'use strict';
 
-const key = 'b4e2181599f446189b6f2deef991b5de';//process.env.PUSHPLUS_KEY;
-//'SCT247069TNUXgDyRxxFvpAg0fPdk0BJU9';
-//'SCT245797TQPmsilGTjKbWYDC4vAaVoHHh';
+const key = process.env.PUSHPLUS_KEY;
 
 const url = 'http://dtxtj.gdhuaxun.net:1009//App/DataApi.ashx';
 const push_url = `http://www.pushplus.plus/send`;
