@@ -1,6 +1,7 @@
 'use strict';
 
 const key = process.env.PUSHPLUS_KEY;
+const topic = process.env.PUSHPLUS_TOPIC;
 
 const url = 'http://dtxtj.gdhuaxun.net:1009//App/DataApi.ashx';
 const push_url = `http://www.pushplus.plus/send`;
@@ -50,6 +51,7 @@ async function pushMsg(title, content) {
     const data = {
         token: key,
         title,
+        topic,
         content: content.replace("\n", "<br>"),
         template: "json",
     }
